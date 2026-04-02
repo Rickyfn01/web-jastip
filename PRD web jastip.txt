@@ -1,0 +1,30 @@
+Product Requirements Document (PRD): "Jastip VIP - Insider Access"Project Name: Jastip MAP Insider (Working Title)Objective: Membangun platform Personal Shopper premium yang menghubungkan pelanggan dengan produk brand ternama (MAP Group) menggunakan harga "diskon karyawan" yang eksklusif, aman, dan transparan.1. Strategi Marketing & SEO (The "Hook")Agar calon pelanggan langsung tertarik, website ini akan menggunakan narasi "Akses Orang Dalam".A. Headline & Copywriting Utama (Hero Section)Headline: "Dapatkan Barang Brand Favoritmu dengan Harga 'Orang Dalam' – 100% Original, Tanpa Antre!"Sub-headline: "Mau sepatu Nike, tas Zara, atau skincare Sephora tapi kemahalan? Kirim fotonya, kami carikan di store dengan diskon eksklusif karyawan. Jaminan termurah, jaminan original."CTA (Call to Action): "Titip Barang Sekarang (Slot Terbatas!)"B. Strategi SEOKeywords: Jastip MAP murah, Jastip Zara Original, Jastip Nike Diskon, Personal Shopper Brand Jakarta, Jastip Sephora terpercaya.Struktur URL: domain.com/jastip-[nama-brand] (Dinamis untuk menangkap traffic pencarian brand spesifik).Metadata: Menggunakan Open Graph agar saat link dibagikan ke WhatsApp/Instagram, muncul preview gambar yang profesional dan meyakinkan.2. Fitur Utama (Functional Requirements)A. Sisi Pelanggan (Public & Tracking)Smart Request Form:Upload foto barang (Drag & Drop).Input Nama Barang, Brand, Ukuran/Size, dan Warna.Pilihan Opsi DP: 50%, 75%, atau 100%.Live Order Tracking:Halaman unik per pesanan (/track/[order-id]).Timeline status: Menunggu Konfirmasi -> Sedang Dicari -> Barang Ditemukan (Siap Bayar) -> Sudah Dibeli -> Dalam Pengiriman.WhatsApp Seamless Integration:Tombol "Konsultasi via WA" yang melayang (floating).Notifikasi otomatis saat status barang berubah.B. Sisi Admin (Dashboard Kamu)Order Management: List semua permintaan masuk dengan filter status.Price Calculator: Input harga store -> Pilih % diskon -> Klik hitung -> Harga final otomatis muncul (termasuk fee jastip Rp25rb).Evidence Uploader: Kolom untuk upload foto struk belanja dan foto barang yang sudah dibeli sebagai bukti ke customer.Payment Status Toggle: Menandai manual apakah sisa pembayaran sudah lunas atau belum.3. Alur Pengguna (User Journey)Discovery: User masuk ke web, terpukau dengan headline "Harga Orang Dalam".Request: User upload screenshot sepatu Nike dari IG ke form request.Checking: Kamu menerima notifikasi, cek ke mall. Jika ada, kamu update harga di dashboard.Payment: User dapat link tracking, melihat harga final, dan membayar DP sesuai pilihan (50/75/100%).Closing: Kamu beli barangnya, upload foto struk, kirim barang, dan user melunasi sisanya secara manual.4. Spesifikasi Teknis (Tech Stack)KomponenTeknologiAlasanFrameworkNext.js 14 (App Router)SEO terbaik, performa cepat, dan developer experience yang kamu kuasai.DatabasePostgreSQL (via Supabase/Neon)Keamanan data transaksi dan relasi data yang kuat.ORMPrismaMemudahkan manipulasi data PostgreSQL dengan type-safety.StylingTailwind CSS + Shadcn/UIUI modern, bersih, dan terlihat sangat profesional/premium.StorageSupabase StorageTempat menyimpan foto produk dari customer & foto struk belanja.AnalyticsGoogle Search ConsoleMemantau performa SEO dan kata kunci yang masuk.5. Skema Database (Prisma Schema)Cuplikan kode// Contoh struktur inti untuk PostgreSQL
+model Order {
+  id              String   @id @default(uuid())
+  customerName    String
+  whatsappNumber  String
+  productImage    String   // URL dari Supabase Storage
+  productNote     String?
+  brand           String
+  size            String?
+  status          Status   @default(PENDING)
+  
+  storePrice      Float?   // Harga asli di toko
+  finalPrice      Float?   // (StorePrice - Diskon) + 25k
+  dpPercentage    Int      // 50, 75, atau 100
+  dpAmount        Float?   // Nominal yang harus dibayar awal
+  
+  receiptImage    String?  // Foto struk setelah dibeli
+  createdAt       DateTime @default(now())
+}
+
+enum Status {
+  PENDING
+  CHECKING
+  READY_TO_PAY
+  PAID_DP
+  PURCHASED
+  SHIPPED
+  COMPLETED
+}
+6. Kalimat Marketing "Convertible" untuk WebTrust Builder: "Sudah 500+ barang branded sampai ke tangan pemiliknya dengan harga jauh di bawah harga tag toko."Urgency: "Kapasitas diskon terbatas setiap bulannya. Amankan slot titipanmu sekarang sebelum kuota penuh!"Value Proposition: "Kenapa bayar harga penuh jika ada jalur 'Insider'? 100% Authentic MAP Store, atau uang kembali 10x lipat."
