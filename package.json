@@ -10,7 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "test:e2e": "playwright test",
-    "test:e2e:live": "cross-env PLAYWRIGHT_BASE_URL=https://web-jastip-ricky.vercel.app ADMIN_PASSWORD=JastipVIP-Admin-2026!Secure playwright test",
+    "test:e2e:live": "cross-env PLAYWRIGHT_BASE_URL=https://web-jastip-ricky.vercel.app ADMIN_PASSWORD=Jastip21okt23# playwright test",
     "db:generate": "prisma generate",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio"

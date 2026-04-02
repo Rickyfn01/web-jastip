@@ -10,6 +10,7 @@ export default function RequestForm() {
   const [successOrderId, setSuccessOrderId] = useState<string | null>(null);
   const [fileName, setFileName] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const [warningMsg, setWarningMsg] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -38,6 +39,7 @@ export default function RequestForm() {
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMsg('');
+    setWarningMsg('');
 
     const formData = new FormData(e.currentTarget);
     if (selectedFile) {
@@ -57,6 +59,9 @@ export default function RequestForm() {
       }
 
       setSuccessOrderId(data.order.id);
+      if (data.warning) {
+        setWarningMsg(data.warning);
+      }
       
     } catch (error: unknown) {
       setErrorMsg((error as Error).message);
@@ -120,6 +125,12 @@ export default function RequestForm() {
         ) : (
           /* Form */
           <form onSubmit={handleSubmit} className="p-6 pt-4 space-y-4">
+            {warningMsg && !errorMsg && (
+              <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-amber-400 mt-0.5 shrink-0" />
+                <p className="text-sm text-amber-200">{warningMsg}</p>
+              </div>
+            )}
             {errorMsg && (
               <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />

@@ -29,16 +29,14 @@ export async function POST(request: Request) {
     }
 
     let productImageUrl = '';
+    let uploadWarning: string | null = null;
     
     if (file && file.size > 0) {
       const url = await uploadImage(file, 'product-images');
       if (url) {
         productImageUrl = url;
       } else {
-        return NextResponse.json(
-          { error: 'Gagal mengupload gambar produk. Pastikan konfigurasi Supabase benar.' },
-          { status: 500 }
-        );
+        uploadWarning = 'Gambar produk tidak berhasil diunggah, tetapi pesanan tetap kami terima.';
       }
     }
 
@@ -57,7 +55,7 @@ export async function POST(request: Request) {
     // Simulasi notifikasi WA
     console.log(`[WHATSAPP WEBHOOK DUMMY] Pesanan baru dari ${customerName} (${whatsappNumber}) untuk brand ${brand}. ID: ${order.id}`);
 
-    return NextResponse.json({ success: true, order }, { status: 201 });
+    return NextResponse.json({ success: true, order, warning: uploadWarning }, { status: 201 });
   } catch (error: unknown) {
     console.error('Error creating order:', error);
     return NextResponse.json(
