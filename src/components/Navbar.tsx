@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Menu, X, ShoppingBag } from 'lucide-react';
 
 export default function Navbar() {
@@ -33,7 +34,10 @@ export default function Navbar() {
         </div>
 
         {/* Desktop CTA */}
-        <div className="hidden md:block">
+        <div className="hidden md:flex items-center gap-3">
+          <Link href="/register" className="text-sm font-medium text-zinc-300 hover:text-white transition-colors">
+            Daftar Pembeli
+          </Link>
           <button onClick={() => scrollTo('request-form')} className="bg-white text-black text-sm font-semibold px-5 py-2 rounded-full hover:bg-zinc-200 transition-colors">
             Titip Sekarang
           </button>
@@ -52,6 +56,9 @@ export default function Navbar() {
           <button onClick={() => scrollTo('brands')} className="block w-full text-left text-zinc-300 hover:text-white py-2">Brand</button>
           <button onClick={() => scrollTo('testimonials')} className="block w-full text-left text-zinc-300 hover:text-white py-2">Testimoni</button>
           <button onClick={() => scrollTo('faq')} className="block w-full text-left text-zinc-300 hover:text-white py-2">FAQ</button>
+          <Link href="/register" onClick={() => setIsMenuOpen(false)} className="block w-full text-left text-zinc-300 hover:text-white py-2">
+            Daftar Pembeli
+          </Link>
           <button onClick={() => scrollTo('request-form')} className="w-full bg-white text-black text-sm font-semibold px-5 py-2.5 rounded-full mt-2">
             Titip Sekarang
           </button>
