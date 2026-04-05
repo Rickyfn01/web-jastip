@@ -1,7 +1,33 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+const SESSION_SECRET = process.env.CUSTOMER_SESSION_SECRET || 'customer-session-secret';
+
+async function verifyCustomerSessionToken(token: string): Promise<string | null> {
+  const [customerId, signature] = token.split('.');
+
+  if (!customerId || !signature) {
+    return null;
+  }
+
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(SESSION_SECRET),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+
+  const signed = await crypto.subtle.sign('HMAC', key, encoder.encode(customerId));
+  const expectedSignature = Array.from(new Uint8Array(signed))
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('');
+
+  return signature === expectedSignature ? customerId : null;
+}
+
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 1. Rewrite for SEO: /jastip-[brand] -> /brand/[brand]
@@ -15,7 +41,10 @@ export function middleware(request: NextRequest) {
   const isMemberRoute = pathname.startsWith('/member');
   if (isMemberRoute) {
     const customerSession = request.cookies.get('customer_session');
-    const isAuthenticated = customerSession?.value === 'authenticated';
+    const customerId = customerSession?.value
+      ? await verifyCustomerSessionToken(customerSession.value)
+      : null;
+    const isAuthenticated = Boolean(customerId);
 
     if (!isAuthenticated) {
       return NextResponse.redirect(new URL('/register?next=' + encodeURIComponent(pathname), request.url));
