@@ -8,11 +8,11 @@ test.describe.serial('JastipVIP order flow', () => {
     await prisma.$disconnect();
   });
 
-  test('order API rejects missing required fields', async ({ request }) => {
+  test('order API rejects missing required fields without customer auth', async ({ request }) => {
     const formData = new FormData();
     formData.set('customerName', 'E2E Missing Fields');
     formData.set('brand', 'No DP Scenario');
-    // intentionally omit whatsappNumber and dpPercentage
+    // intentionally omit customerId, whatsappNumber and dpPercentage
 
     const response = await request.post('/api/orders', {
       multipart: {
@@ -21,9 +21,9 @@ test.describe.serial('JastipVIP order flow', () => {
       },
     });
 
-    expect(response.status()).toBe(400);
+    expect(response.status()).toBe(401);
     const payload = await response.json();
-    expect(payload.error).toContain('wajib diisi');
+    expect(payload.error).toContain('terdaftar');
   });
 
   test('admin login fails with wrong password', async ({ page }) => {
@@ -35,15 +35,48 @@ test.describe.serial('JastipVIP order flow', () => {
     await expect(page.getByText('Password salah')).toBeVisible();
   });
 
-  test('customer submit -> database -> tracking -> admin update', async ({ page }) => {
+  test('customer register -> submit order -> database -> tracking -> admin update', async ({ page }) => {
     const runId = Date.now();
+    const fullName = `E2E Customer ${runId}`;
+    const customerEmail = `e2e${runId}@test.local`;
+    const whatsappNumber = `08123${String(runId).slice(-8)}`;
+    const password = 'TestPassword123';
     const customerName = `E2E User ${runId}`;
     const brand = `Nike Air Force 1 ${runId}`;
-    const whatsappNumber = `08123${String(runId).slice(-8)}`;
-    const password = process.env.ADMIN_PASSWORD || 'admin123';
+    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
 
-    await page.goto('/');
-    await page.locator('button#request-form').click();
+    // Step 1: Register as a customer
+    await page.goto('/register');
+    await page.locator('input[id="fullName"]').fill(fullName);
+    await page.locator('input[id="whatsappNumber"]').fill(whatsappNumber);
+    await page.locator('input[id="email"]').fill(customerEmail);
+    await page.locator('input[id="password"]').fill(password);
+    await page.locator('input[id="confirmPassword"]').fill(password);
+    
+    const registerResponsePromise = page.waitForResponse((response) =>
+      response.url().includes('/api/customers/register') && response.request().method() === 'POST'
+    );
+    await page.getByRole('button', { name: /Daftar Sekarang/i }).click();
+    const registerResponse = await registerResponsePromise;
+    expect(registerResponse.ok()).toBeTruthy();
+
+    const registerPayload = await registerResponse.json();
+    expect(registerPayload.success).toBe(true);
+    const customerId = registerPayload.customer.id;
+
+    // Step 2: Navigate back to home and submit order
+    await page.goto('/?registered=1');
+    await page.locator('button:has-text("Titip Barang Sekarang")').click();
+
+    // Set localStorage markers for client-side auth
+    await page.evaluate((cId) => {
+      localStorage.setItem('customer_session_marker', 'true');
+      localStorage.setItem('customer_id', cId);
+    }, customerId);
+
+    // Reload to trigger auth check
+    await page.reload();
+    await page.locator('button:has-text("Titip Barang Sekarang")').click();
 
     await page.locator('input[name="customerName"]').fill(customerName);
     await page.locator('input[name="whatsappNumber"]').fill(whatsappNumber);
@@ -66,7 +99,7 @@ test.describe.serial('JastipVIP order flow', () => {
     expect(trackingHref).toMatch(/^\/track\//);
 
     const createdOrder = await prisma.order.findFirst({
-      where: { customerName, brand, whatsappNumber },
+      where: { customerId, customerName, brand },
     });
 
     expect(createdOrder).not.toBeNull();
@@ -79,7 +112,7 @@ test.describe.serial('JastipVIP order flow', () => {
     await expect(page.getByRole('heading', { name: 'Menunggu Konfirmasi' })).toBeVisible();
 
     await page.goto('/admin');
-    await page.locator('input[type="password"]').fill(password);
+    await page.locator('input[type="password"]').fill(adminPassword);
     await page.getByRole('button', { name: 'Akses Dashboard' }).click();
     await expect(page).toHaveURL(/\/admin\/dashboard/);
 
@@ -101,6 +134,8 @@ test.describe.serial('JastipVIP order flow', () => {
     await expect(page.getByText('Rp 1.200.000')).toBeVisible();
     await expect(page.getByText('Rp 1.225.000')).toBeVisible();
 
+    // Cleanup: Delete test data
     await prisma.order.delete({ where: { id: createdOrder!.id } });
+    await prisma.customer.delete({ where: { id: customerId } });
   });
 });

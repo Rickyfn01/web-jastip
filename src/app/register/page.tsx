@@ -42,6 +42,12 @@ export default function RegisterPage() {
       }
 
       setSuccess(`Akun ${data.customer.fullName} berhasil dibuat.`);
+      
+      // Set session marker in localStorage for client-side auth check
+      localStorage.setItem('customer_session_marker', 'true');
+      localStorage.setItem('customer_id', data.customer.id);
+      localStorage.setItem('customer_name', data.customer.fullName);
+      
       router.push('/?registered=1');
     } catch (error: unknown) {
       setError((error as Error).message);

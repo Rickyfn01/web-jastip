@@ -33,3 +33,19 @@ export function createCustomerSessionToken(customerId: string) {
   const signature = crypto.createHmac('sha256', SESSION_SECRET).update(customerId).digest('hex');
   return `${customerId}.${signature}`;
 }
+
+export function verifyCustomerSessionToken(token: string): string | null {
+  const [customerId, signature] = token.split('.');
+  
+  if (!customerId || !signature) {
+    return null;
+  }
+
+  const expectedSignature = crypto.createHmac('sha256', SESSION_SECRET).update(customerId).digest('hex');
+  
+  if (!crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature))) {
+    return null;
+  }
+
+  return customerId;
+}

@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import { Upload, X, CheckCircle2, Loader2, AlertCircle, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { useCustomerAuth } from '@/lib/use-customer-auth';
 
 export default function RequestForm() {
+  const { isLoggedIn, customerId, isLoading } = useCustomerAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successOrderId, setSuccessOrderId] = useState<string | null>(null);
@@ -45,6 +47,9 @@ export default function RequestForm() {
     if (selectedFile) {
       formData.set('file', selectedFile);
     }
+    if (customerId) {
+      formData.set('customerId', customerId);
+    }
     
     try {
       const response = await fetch('/api/orders', {
@@ -73,16 +78,69 @@ export default function RequestForm() {
   if (!isOpen) {
     return (
       <button 
-        id="request-form"
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-8 right-8 z-50 bg-white text-black px-6 py-4 rounded-full font-bold shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:scale-105 active:scale-95 transition-all duration-200 flex items-center gap-2"
+        onClick={() => {
+          if (!isLoggedIn && !isLoading) {
+            setIsOpen(true);
+          } else if (isLoggedIn) {
+            setIsOpen(true);
+          }
+        }}
+        disabled={isLoading}
+        className="fixed bottom-8 right-8 z-50 bg-white text-black px-6 py-4 rounded-full font-bold shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:scale-105 active:scale-95 transition-all duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <span className="relative flex h-3 w-3">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
           <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
         </span>
-        Titip Barang Sekarang
+        {isLoading ? 'Memuat...' : 'Titip Barang Sekarang'}
       </button>
+    );
+  }
+
+  // Show login/register modal if not logged in
+  if (!isLoggedIn && !isLoading) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onClick={(e) => { if (e.target === e.currentTarget) setIsOpen(false); }}>
+        <div className="bg-zinc-900 border border-zinc-800 w-full max-w-lg rounded-2xl shadow-2xl relative max-h-[90vh] overflow-y-auto">
+          {/* Header */}
+          <div className="sticky top-0 bg-zinc-900/95 backdrop-blur-sm border-b border-zinc-800 p-6 pb-4 rounded-t-2xl z-10">
+            <button 
+              onClick={() => setIsOpen(false)}
+              className="absolute right-4 top-4 text-zinc-400 hover:text-white transition-colors p-1"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <h3 className="text-xl md:text-2xl font-bold text-white">Login atau Daftar</h3>
+            <p className="text-zinc-400 text-sm mt-1">Anda harus memiliki akun pembeli untuk titip barang.</p>
+          </div>
+
+          {/* Content */}
+          <div className="p-6 md:p-8 space-y-6">
+            <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-blue-400 mt-0.5 shrink-0" />
+              <p className="text-sm text-blue-300">Daftar terlebih dahulu untuk mengumpulkan data pembeli dan memudahkan proses order berikutnya.</p>
+            </div>
+
+            <div className="space-y-3">
+              <Link 
+                href="/register"
+                onClick={() => setIsOpen(false)}
+                className="w-full bg-white text-black font-semibold rounded-xl py-3.5 flex items-center justify-center gap-2 hover:bg-zinc-200 transition-colors"
+              >
+                <CheckCircle2 className="w-5 h-5" />
+                Daftar Akun Baru
+              </Link>
+              
+              <button
+                onClick={() => setIsOpen(false)}
+                className="w-full bg-zinc-800 text-white font-semibold rounded-xl py-3.5 hover:bg-zinc-700 transition-colors"
+              >
+                Tutup
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 

@@ -6,12 +6,33 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
 
+    const customerId = formData.get('customerId') as string;
     const customerName = formData.get('customerName') as string;
     const whatsappNumber = formData.get('whatsappNumber') as string;
     const brand = formData.get('brand') as string;
     const size = formData.get('size') as string | null;
     const dpPercentageStr = formData.get('dpPercentage') as string;
     const file = formData.get('file') as File | null;
+
+    // Require customer to be registered
+    if (!customerId) {
+      return NextResponse.json(
+        { error: 'Anda harus terdaftar sebagai calon pembeli untuk titip barang. Silakan daftar terlebih dahulu.' },
+        { status: 401 }
+      );
+    }
+
+    // Verify customer exists in database
+    const customer = await prisma.customer.findUnique({
+      where: { id: customerId },
+    });
+
+    if (!customer) {
+      return NextResponse.json(
+        { error: 'Data pembeli tidak valid. Silakan daftar ulang.' },
+        { status: 401 }
+      );
+    }
 
     if (!customerName || !whatsappNumber || !brand || !dpPercentageStr) {
       return NextResponse.json(
@@ -42,6 +63,7 @@ export async function POST(request: Request) {
 
     const order = await prisma.order.create({
       data: {
+        customerId,
         customerName,
         whatsappNumber,
         brand,
