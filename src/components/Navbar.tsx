@@ -43,9 +43,14 @@ export default function Navbar() {
               Dashboard
             </Link>
           ) : (
-            <Link href="/register" className="text-[11px] uppercase tracking-[0.14em] text-zinc-300 hover:text-[#e9c349] transition-colors">
-              Daftar Pembeli
-            </Link>
+            <>
+              <Link href="/login" className="text-[11px] uppercase tracking-[0.14em] text-zinc-300 hover:text-[#e9c349] transition-colors">
+                Login Member
+              </Link>
+              <Link href="/register" className="text-[11px] uppercase tracking-[0.14em] text-zinc-300 hover:text-[#e9c349] transition-colors">
+                Daftar Pembeli
+              </Link>
+            </>
           )}
         </div>
 
@@ -67,9 +72,14 @@ export default function Navbar() {
               Dashboard
             </Link>
           ) : (
-            <Link href="/register" onClick={() => setIsMenuOpen(false)} className="block w-full text-left text-[11px] uppercase tracking-[0.14em] text-zinc-300 hover:text-[#e9c349] py-2">
-              Daftar Pembeli
-            </Link>
+            <>
+              <Link href="/login" onClick={() => setIsMenuOpen(false)} className="block w-full text-left text-[11px] uppercase tracking-[0.14em] text-zinc-300 hover:text-[#e9c349] py-2">
+                Login Member
+              </Link>
+              <Link href="/register" onClick={() => setIsMenuOpen(false)} className="block w-full text-left text-[11px] uppercase tracking-[0.14em] text-zinc-300 hover:text-[#e9c349] py-2">
+                Daftar Pembeli
+              </Link>
+            </>
           )}
         </div>
       )}
