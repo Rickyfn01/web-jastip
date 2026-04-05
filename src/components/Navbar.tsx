@@ -1,11 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const customerSessionMarker = localStorage.getItem('customer_session_marker');
+    setIsLoggedIn(customerSessionMarker === 'true');
+  }, []);
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -32,9 +38,15 @@ export default function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-3">
-          <Link href="/register" className="text-[11px] uppercase tracking-[0.14em] text-zinc-300 hover:text-[#e9c349] transition-colors">
-            Daftar Pembeli
-          </Link>
+          {isLoggedIn ? (
+            <Link href="/member/dashboard" className="text-[11px] uppercase tracking-[0.14em] text-zinc-300 hover:text-[#e9c349] transition-colors">
+              Dashboard
+            </Link>
+          ) : (
+            <Link href="/register" className="text-[11px] uppercase tracking-[0.14em] text-zinc-300 hover:text-[#e9c349] transition-colors">
+              Daftar Pembeli
+            </Link>
+          )}
         </div>
 
         {/* Mobile Toggle */}
@@ -50,9 +62,15 @@ export default function Navbar() {
           <button onClick={() => scrollTo('brands')} className="block w-full text-left text-[11px] uppercase tracking-[0.14em] text-zinc-300 hover:text-[#e9c349] py-2">Brand</button>
           <button onClick={() => scrollTo('testimonials')} className="block w-full text-left text-[11px] uppercase tracking-[0.14em] text-zinc-300 hover:text-[#e9c349] py-2">Testimoni</button>
           <button onClick={() => scrollTo('faq')} className="block w-full text-left text-[11px] uppercase tracking-[0.14em] text-zinc-300 hover:text-[#e9c349] py-2">FAQ</button>
-          <Link href="/register" onClick={() => setIsMenuOpen(false)} className="block w-full text-left text-[11px] uppercase tracking-[0.14em] text-zinc-300 hover:text-[#e9c349] py-2">
-            Daftar Pembeli
-          </Link>
+          {isLoggedIn ? (
+            <Link href="/member/dashboard" onClick={() => setIsMenuOpen(false)} className="block w-full text-left text-[11px] uppercase tracking-[0.14em] text-zinc-300 hover:text-[#e9c349] py-2">
+              Dashboard
+            </Link>
+          ) : (
+            <Link href="/register" onClick={() => setIsMenuOpen(false)} className="block w-full text-left text-[11px] uppercase tracking-[0.14em] text-zinc-300 hover:text-[#e9c349] py-2">
+              Daftar Pembeli
+            </Link>
+          )}
         </div>
       )}
     </nav>

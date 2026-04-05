@@ -1,4 +1,16 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+
 export default function Footer() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const customerSessionMarker = localStorage.getItem('customer_session_marker');
+    setIsLoggedIn(customerSessionMarker === 'true');
+  }, []);
+
   return (
     <footer className="bg-[#0b0b0b] py-16 px-6">
       <div className="max-w-7xl mx-auto">
@@ -21,6 +33,9 @@ export default function Footer() {
               <li><a href="#brands" className="hover:text-[#e9c349] transition-colors">Brand Tersedia</a></li>
               <li><a href="#testimonials" className="hover:text-[#e9c349] transition-colors">Testimoni</a></li>
               <li><a href="#faq" className="hover:text-[#e9c349] transition-colors">FAQ</a></li>
+              {isLoggedIn && (
+                <li><Link href="/member/dashboard" className="hover:text-[#e9c349] transition-colors">Dashboard</Link></li>
+              )}
             </ul>
           </div>
 
