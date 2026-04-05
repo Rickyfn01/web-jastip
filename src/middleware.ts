@@ -11,7 +11,18 @@ export function middleware(request: NextRequest) {
     return NextResponse.rewrite(newUrl);
   }
 
-  // 2. Admin Authentication
+  // 2. Member Authentication
+  const isMemberRoute = pathname.startsWith('/member');
+  if (isMemberRoute) {
+    const customerSession = request.cookies.get('customer_session');
+    const isAuthenticated = customerSession?.value === 'authenticated';
+
+    if (!isAuthenticated) {
+      return NextResponse.redirect(new URL('/register?next=' + encodeURIComponent(pathname), request.url));
+    }
+  }
+
+  // 3. Admin Authentication
   const isAdminRoute = pathname.startsWith('/admin');
   const isLoginPage = pathname === '/admin';
   const isAdminApiLogin = pathname === '/api/admin/login';
@@ -40,5 +51,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/admin', '/jastip-:path*'],
+  matcher: ['/admin/:path*', '/admin', '/jastip-:path*', '/member/:path*'],
 };

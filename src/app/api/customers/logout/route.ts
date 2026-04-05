@@ -1,12 +1,13 @@
 import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 
 export async function POST() {
   try {
-    // Clear customer session cookie if any future implementation uses it
-    cookies().delete('customer_session');
+    const response = NextResponse.json({ success: true });
     
-    return NextResponse.json({ success: true });
+    // Clear customer session cookie
+    response.cookies.delete('customer_session');
+    
+    return response;
   } catch (error) {
     console.error('Logout error:', error);
     return NextResponse.json(
