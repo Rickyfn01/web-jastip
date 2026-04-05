@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>JastipVIP | Personal Shopper Eksklusif MAP Group</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed-variant": "#656667",
+                    "inverse-surface": "#f9f9f9",
+                    "secondary-container": "#262c97",
+                    "secondary-dim": "#8d94ff",
+                    "error-dim": "#b95463",
+                    "surface-container-low": "#131313",
+                    "outline-variant": "#484848",
+                    "secondary": "#8d94ff",
+                    "surface-container-highest": "#262626",
+                    "on-tertiary": "#5e5f60",
+                    "error": "#ec7c8a",
+                    "on-error-container": "#ff97a3",
+                    "on-tertiary-fixed": "#484a4a",
+                    "on-primary": "#4f3e00",
+                    "primary-container": "#574500",
+                    "on-primary-fixed-variant": "#705900",
+                    "primary-fixed": "#ffe088",
+                    "tertiary-container": "#ebebeb",
+                    "secondary-fixed-dim": "#cfd1ff",
+                    "on-background": "#e5e5e5",
+                    "secondary-fixed": "#e0e0ff",
+                    "on-error": "#490013",
+                    "primary-dim": "#dab53d",
+                    "surface-container-lowest": "#000000",
+                    "surface-bright": "#2c2c2c",
+                    "outline": "#757575",
+                    "primary-fixed-dim": "#f8d056",
+                    "tertiary-fixed-dim": "#e5e5e5",
+                    "on-secondary": "#00007c",
+                    "on-secondary-fixed-variant": "#484fb9",
+                    "tertiary-dim": "#ebebeb",
+                    "background": "#0e0e0e",
+                    "inverse-primary": "#745c00",
+                    "on-primary-fixed": "#4e3d00",
+                    "on-primary-container": "#f4cc52",
+                    "on-secondary-fixed": "#2a309b",
+                    "tertiary-fixed": "#f3f3f4",
+                    "on-surface-variant": "#ababab",
+                    "surface-container": "#191919",
+                    "surface-tint": "#e9c349",
+                    "on-surface": "#e5e5e5",
+                    "tertiary": "#f9f9f9",
+                    "inverse-on-surface": "#555555",
+                    "on-tertiary-container": "#555757",
+                    "primary": "#e9c349",
+                    "on-secondary-container": "#b6baff",
+                    "error-container": "#7f2737",
+                    "surface": "#0e0e0e",
+                    "surface-container-high": "#1f1f1f",
+                    "surface-dim": "#0e0e0e",
+                    "surface-variant": "#262626"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .brand-logo-grayscale { filter: grayscale(100%); transition: filter 0.4s ease; opacity: 0.6; }
+        .brand-logo-grayscale:hover { filter: grayscale(0%); opacity: 1; }
+    </style>
+</head>
+<body class="bg-background text-on-background selection:bg-primary selection:text-on-primary">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-[#0e0e0e]/70 backdrop-blur-xl">
+<nav class="flex justify-between items-center px-8 py-4 max-w-full">
+<div class="text-xl font-black text-[#f9f9f9] tracking-tighter">JastipVIP</div>
+<div class="hidden md:flex gap-10 items-center">
+<a class="text-[#f9f9f9] text-sm font-medium hover:text-[#e9c349] transition-colors duration-300 uppercase tracking-[0.1em]" href="#">Cara Kerja</a>
+<a class="text-[#f9f9f9] text-sm font-medium hover:text-[#e9c349] transition-colors duration-300 uppercase tracking-[0.1em]" href="#">Brand</a>
+<a class="text-[#f9f9f9] text-sm font-medium hover:text-[#e9c349] transition-colors duration-300 uppercase tracking-[0.1em]" href="#">Testimoni</a>
+<a class="text-[#f9f9f9] text-sm font-medium hover:text-[#e9c349] transition-colors duration-300 uppercase tracking-[0.1em]" href="#">FAQ</a>
+</div>
+<button class="bg-[#e9c349] text-[#4f3e00] px-6 py-2.5 text-sm font-bold uppercase tracking-widest active:scale-95 duration-200">
+                Mulai Titip
+            </button>
+</nav>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex flex-col justify-center items-start px-8 pt-20 overflow-hidden">
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent z-10"></div>
+<img alt="Luxury Tokyo Shopping District" class="w-full h-full object-cover grayscale opacity-40" data-alt="Cinematic wide shot of a high-end luxury shopping street at dusk with glowing store windows and sharp architectural lines" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAs61vITFsNKAUXulRBDNXHbsOIxQwg5O9ikiuGVDDvuNRrc5h907sh5wAzw4LUUB2Wg6o0R7CLMUIcwQFb2fI7olbVbONFaZNs_d8fPLdmIductUE6QDAOP7IpP2_Ulg0vTviO3G9sXmyjfWVYa55P5PuENiiVRqW52GFZ8p5bdn9QHpg87pV_d7sKC32iDLMAVneXFTJzCBhNgE384mOrLaTAPvObEEeQlpkZWn-Gzr6A0SPIKQydagU_mpEuNii9Q1eaYE2gtic"/>
+</div>
+<div class="relative z-20 max-w-4xl">
+<p class="text-primary font-bold uppercase tracking-[0.3em] mb-6 text-sm">Exclusive VIP Access</p>
+<h1 class="text-5xl md:text-7xl font-extrabold text-tertiary leading-[1.1] tracking-tighter mb-8">
+                    Dapatkan Barang Brand Favoritmu dengan Harga "Insider" MAP Group.
+                </h1>
+<p class="text-on-surface-variant text-lg md:text-xl max-w-2xl mb-12 leading-relaxed">
+                    Akses eksklusif diskon karyawan untuk Nike, Zara, Sephora, dan 100+ brand lainnya. 100% Original, 100% Aman.
+                </p>
+<div class="flex flex-col sm:flex-row gap-6">
+<button class="bg-primary text-on-primary px-10 py-5 text-sm font-bold uppercase tracking-widest hover:brightness-110 transition-all">
+                        Mulai Titip Sekarang
+                    </button>
+<button class="border border-outline-variant text-tertiary px-10 py-5 text-sm font-bold uppercase tracking-widest hover:bg-surface-container-highest transition-all">
+                        Pelajari Lebih Lanjut
+                    </button>
+</div>
+</div>
+</section>
+<!-- Brand Grid Section -->
+<section class="bg-surface-container-low py-24 px-8">
+<div class="max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+<div>
+<h2 class="text-3xl font-bold text-tertiary mb-4">Trusted Brands</h2>
+<p class="text-on-surface-variant uppercase tracking-widest text-xs">100% Authentic MAP Store Official Collections</p>
+</div>
+<div class="h-[1px] flex-grow mx-12 bg-outline-variant/30 hidden md:block"></div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-12 items-center">
+<img alt="Nike" class="brand-logo-grayscale h-8 mx-auto object-contain" data-alt="Official Nike brand logo in clean minimalist vector style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9xGznd14eRSvM8DTTRkfR6V-SyfsDFolex0aImCmdGUWry5VlLDSErB5dnxxMc42cbAPKRwBSiaQMNhn6UR3ZNYZ1JLS9aO3R4sk0Q_ism6ogLOdtRBuwlbQACSHedf5C_u2DOBlvYmbe8JBkCfd5pSs8ltJy6G2fbh_ndLmer5lHzeb4fyi9MzEFd0_KwMsxXBNvNidW_zHobqr56VOK-CYvuCB6kDcPsZgbHIHHL3Bw14BZAp0qmI5kTWW6zUnOd4jntYJxzVA"/>
+<img alt="Zara" class="brand-logo-grayscale h-6 mx-auto object-contain" data-alt="Official Zara fashion brand logo in clean minimalist vector style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2m2t0nbfhR6dTZaCoY05IxpaptMGZaU7HYliUV0KQd7NIPAdg5cqnx_SJmq0UAHG7jOZ0t0PCvMQPWx6Y5hIqDbCzpo-a0pM8u2u1RnFG-utffE4Z2kvG6tgdXZklYtAaRJdYCANgENa5M_ej5727a0OmLFc2fC7xdorSW7XMI3EzcjDNgdXLujAbSxcW1v6Jg5aRWRKHeVoAsvp95biKNCckz9LyyhCKgZqPybvH1TP-t_61ggteVNcrM3fC3fi-wlYcSqzgGAQ"/>
+<img alt="Adidas" class="brand-logo-grayscale h-10 mx-auto object-contain" data-alt="Official Adidas brand logo in clean minimalist vector style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGRkWqPdb-NEYB0QlVUxpxXrm_p0y_eylWCn8BNiFrXLszxcQN-TEE1kxWVU1uOtmmP--FyWxCyJfwm48h5innd7D3bboWB3vRsisYi1rNTFMvjX0IktsQmUxuhQ2h83MagD2W5fo9ZvRVwPCOfmPy4GFqcsY_azbP8iwKWY1xOAFkQrIk6J1UJTrwB_4yHL7EoeY1kW91xaGTAs0cTs87djCJIcgtH77Ri-HU2RXCIDXL61rxwYBM0E2faGblBiZ0ymbAKfAM22I"/>
+<img alt="Sephora" class="brand-logo-grayscale h-4 mx-auto object-contain" data-alt="Official Sephora beauty brand logo in clean minimalist vector style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBj7lxCh8g00uxn8VmbwG4VTRNrk3TJL1vQW-zBf7t5p4l-nnXiXIXXkwfST6690EA5yBqugEMu0Oe1_GXtF_1XN4p8QUdY_icUHoSQqM7mRPKIjxEG3Dp2GIGiGhlYpDnzBwIN9r2uEg2CAQT6cFwX6nBLTCHjsjfUYRmSWFZb4x3JvSetFW25LAzvpl-MM1SB-UVmomu-CBf-3G_Ktv6NBon_RYFNEVWbhwj4fxTJKAJ3nvtLQr6TC82rkEEPOEY-uQpxX9-LU4Q"/>
+<img alt="Lacoste" class="brand-logo-grayscale h-12 mx-auto object-contain" data-alt="Official Lacoste brand logo in clean minimalist vector style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkaAk0eramONce9Y-M6XHBRIL0VU9QhcYSZ6waOhoy-_ouXgGyRQOwz6b6IAuP8YOvA5y0tTEYszVTwQAEFVTyPe_O65yiybGxVJi8LJ0Utmx-tmJ3-u9DIbeW9o2wGtakyrPEDqB2GlNfMuow3KFIcAt_6-4uAQIq3ftuw13txKaIWuh8A3JVjbQR5BQy605VM44vKpXzF6U8_RjCW93FTnJyp9dwOUfpMiIkMOoXwpOVz1XjRKOJDz969E0CJC6TUQwre_pP1A0"/>
+<img alt="Converse" class="brand-logo-grayscale h-6 mx-auto object-contain" data-alt="Official Converse brand logo in clean minimalist vector style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZHU5kBBLRK22Xl_kgk_-i1CXxgGqRu4uQUYLFegy8RsM2aPFvJUPGdgOtgVyHlYka5IGM6-gL1I1KedwZQfQC4bJIrxITyWp0Y9u_ySQsWVTA2nq9QDui0d1vUZrvovgUu7Wkr66GGKfHX5DK5Br8GdJhqrA1pN7ZREfDmfBmMVNo89ME924FCfJ1VXfCtcKY_LxI2It-KQwI4Hblzt90xWV80ICBZBZnsuftDQOFH-8WmubRwEPfc2w_1V7zZs-Db2sxt1ynbSQ"/>
+<img alt="Marks &amp; Spencer" class="brand-logo-grayscale h-6 mx-auto object-contain" data-alt="Official Marks and Spencer brand logo in clean minimalist vector style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqlYDaLuqJXrju7eJdihW2tIQ2WfcjWccHlPSCYEaXisCUe4GjuW3zRt1SE-EWyuvjBkbIdRWNw5BTtRLS5LGnBcFMQD07syMVJdMzYu2756a7qmK22kCkeSEv6ADhR1r54umdGlPr2CBvXHUd_I2vRaQRZfRCFLtO4idR9X6UjPo6gc933Q-Eng_devdU1Ywx25ZayGsPgPxjCg0XjPHlNxOflqAOPQqs4gypx7hm83Tu2SMl62u6_W1byKLuXlyXveNk6TfXqRo"/>
+</div>
+</div>
+</section>
+<!-- How It Works Section -->
+<section class="py-32 px-8 bg-background">
+<div class="max-w-7xl mx-auto text-center mb-24">
+<h2 class="text-4xl font-bold text-tertiary mb-6">Simple Concierge Experience</h2>
+<div class="w-12 h-1 bg-primary mx-auto"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-1px bg-outline-variant/20 max-w-6xl mx-auto">
+<div class="bg-background p-12 flex flex-col items-center text-center">
+<div class="mb-8 p-6 bg-surface-container-highest">
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="camera">camera</span>
+</div>
+<p class="text-xs font-bold text-primary uppercase tracking-[0.2em] mb-4">Step 01</p>
+<h3 class="text-xl font-bold mb-4 text-tertiary">Upload Foto Barang</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">Kirim foto atau screenshot barang impianmu langsung melalui form request.</p>
+</div>
+<div class="bg-background p-12 flex flex-col items-center text-center">
+<div class="mb-8 p-6 bg-surface-container-highest">
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="location_on">location_on</span>
+</div>
+<p class="text-xs font-bold text-primary uppercase tracking-[0.2em] mb-4">Step 02</p>
+<h3 class="text-xl font-bold mb-4 text-tertiary">Kami Cek di Store</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">Personal shopper kami akan mengecek ketersediaan barang di store resmi MAP.</p>
+</div>
+<div class="bg-background p-12 flex flex-col items-center text-center">
+<div class="mb-8 p-6 bg-surface-container-highest">
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="inventory_2">inventory_2</span>
+</div>
+<p class="text-xs font-bold text-primary uppercase tracking-[0.2em] mb-4">Step 03</p>
+<h3 class="text-xl font-bold mb-4 text-tertiary">Bayar DP &amp; Dikirim</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">Konfirmasi pesanan dengan DP dan barang akan langsung meluncur ke alamatmu.</p>
+</div>
+</div>
+</section>
+<!-- Order Form & DP Visualizer -->
+<section class="py-32 px-8 bg-surface-container-low">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+<div class="order-first lg:order-last">
+<div class="bg-tertiary p-12 shadow-2xl relative">
+<h2 class="text-background text-3xl font-black mb-8 tracking-tighter uppercase">Request Item</h2>
+<form class="space-y-8">
+<div class="space-y-2">
+<label class="text-[10px] font-bold text-background/60 uppercase tracking-widest">Nama Barang</label>
+<input class="w-full border-0 border-b border-outline-variant bg-transparent py-3 text-background placeholder:text-background/30 focus:ring-0 focus:border-primary transition-all" placeholder="Contoh: Nike Air Jordan 1 Low" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-8">
+<div class="space-y-2">
+<label class="text-[10px] font-bold text-background/60 uppercase tracking-widest">Ukuran / Warna</label>
+<input class="w-full border-0 border-b border-outline-variant bg-transparent py-3 text-background placeholder:text-background/30 focus:ring-0 focus:border-primary transition-all" placeholder="42 / Black" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] font-bold text-background/60 uppercase tracking-widest">Link / Foto</label>
+<div class="flex items-center gap-2 py-3 border-b border-outline-variant">
+<span class="material-symbols-outlined text-background/40" data-icon="attach_file">attach_file</span>
+<span class="text-xs text-background/40">Upload file...</span>
+</div>
+</div>
+</div>
+<div class="space-y-4 pt-4">
+<label class="text-[10px] font-bold text-background/60 uppercase tracking-widest">DP Selector Visualizer</label>
+<div class="grid grid-cols-3 gap-1">
+<button class="border border-outline-variant py-4 text-sm font-bold text-background hover:bg-background hover:text-tertiary transition-all" type="button">50%</button>
+<button class="bg-primary py-4 text-sm font-black text-on-primary" type="button">75%</button>
+<button class="border border-outline-variant py-4 text-sm font-bold text-background hover:bg-background hover:text-tertiary transition-all" type="button">100%</button>
+</div>
+<p class="text-[10px] text-background/50 italic">Highlight: Opsi 75% paling sering dipilih pelanggan.</p>
+</div>
+<button class="w-full bg-background text-tertiary py-5 text-sm font-bold uppercase tracking-[0.2em] hover:bg-on-tertiary transition-all mt-4">
+                                Kirim Request
+                            </button>
+</form>
+</div>
+</div>
+<div class="space-y-8">
+<h2 class="text-5xl font-extrabold text-tertiary tracking-tighter leading-tight">
+                        Siap Memiliki Koleksi Impian Tanpa Harga Retail?
+                    </h2>
+<p class="text-on-surface-variant text-lg leading-relaxed max-w-lg">
+                        Cukup isi formulir di samping. Tim curator kami akan segera menghubungi Anda melalui WhatsApp untuk detail ketersediaan dan total harga final setelah diskon "Insider".
+                    </p>
+<div class="flex items-center gap-6">
+<div class="flex -space-x-4">
+<div class="w-12 h-12 border-2 border-background bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of a sophisticated male customer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADjHnyULLvqbLT-b8Z4cgDHUlF_bH3HiDYheFAxc0dZ2r3RELBJ9MoyEV12wVBjSogUzt5bEUA1zHXSAO-cIDWxGSOy1cmi48pYBx16vVCsHkFRyG-UAcM47fBiLZWfiQLQ2KAV_hbsYf9e3DqyN4TJ-MTCSlvMfBVHLcwB_qhXwRdgaKqbdg6EhYzAE8Ue5_qsXTmjf0x0xf53L7OBcvNWiN8sYb85dqK1f4_83uGLFCtjyERIiHwBNcBKa7y8mVMmxX36vaWWHU"/>
+</div>
+<div class="w-12 h-12 border-2 border-background bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of a smiling female fashion enthusiast" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4rpK2AGlHtpEY_YdUfb_OpW3WZizaQEVrKfSF1LCX2sO8ZjnJ1jTYZUEBg15oMkdmtrvwc3PF0XqS3CO9UF9bpTJ3d0B4r76_2NWOaPrxPbELuIIVuYJA87x_9-HOMmHeUI2A3M_7lTFVGjprb1kNY6R0w1pWGLMzHvRDZEILvnn3fYJWP3gI1oKUjlbJ_-2e8b40iMbpFKewHmKM8l7mwbYPrQ21M0fu6989zbsC2vWYxtFwy4c0rJ9ww-u0bQ9wdw8vAS7uclU"/>
+</div>
+<div class="w-12 h-12 border-2 border-background bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of a trendy young professional customer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2YU108EAV7-sRdO_I5GUBEzHdqFqwXecC8LZvFoyYkamK05iNUKd24yQMlkB9YSKAcxRNIjyRIKvFJiRhjHIH-G7vu1u61KB6Mj3zGWVticPhTa3rq0iiPJAPlUt0y8VPCXWLjst9u6EwBXklwm7qvyDW9AIutAt5IVROm8wFnWJNmt0MURDZoQpqqf7SmpyAENqjZkvAL3_9AgDOJd5G3vJovYF4oML_dosFzK0RnqWrgbNtNxMNv2j61bhzNugd7saDfBd-hrQ"/>
+</div>
+</div>
+<p class="text-sm font-medium text-tertiary">Bergabung dengan 400+ VIP Member lainnya</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Testimonials -->
+<section class="py-32 px-8 bg-background overflow-hidden">
+<div class="max-w-7xl mx-auto mb-20 text-center">
+<p class="text-primary text-xs font-bold uppercase tracking-[0.4em] mb-4">Success Stories</p>
+<h2 class="text-4xl font-extrabold text-tertiary tracking-tight">Dipercaya Ratusan Pelanggan</h2>
+</div>
+<div class="flex gap-8 overflow-x-auto hide-scrollbar pb-12 max-w-7xl mx-auto">
+<div class="min-w-[350px] bg-surface-container-low p-10 flex flex-col justify-between">
+<p class="text-on-surface text-lg leading-relaxed mb-8 italic">"Nggak nyangka bisa dapet Air Jordan harganya jauh dibawah retail. JastipVIP bener-bener recommended!"</p>
+<div>
+<p class="font-bold text-tertiary">Aditya Putra</p>
+<p class="text-xs text-on-surface-variant uppercase tracking-widest">Sneakerhead, Jakarta</p>
+</div>
+</div>
+<div class="min-w-[350px] bg-surface-container-low p-10 flex flex-col justify-between">
+<p class="text-on-surface text-lg leading-relaxed mb-8 italic">"Adminnya fast response, barang 100% original lengkap dengan box dan paper bag MAP. Puas banget!"</p>
+<div>
+<p class="font-bold text-tertiary">Sarah Wijaya</p>
+<p class="text-xs text-on-surface-variant uppercase tracking-widest">Beauty Enthusiast, Bandung</p>
+</div>
+</div>
+<div class="min-w-[350px] bg-surface-container-low p-10 flex flex-col justify-between">
+<p class="text-on-surface text-lg leading-relaxed mb-8 italic">"Udah langganan titip Zara di sini setiap bulan. Selalu dapet item yang susah dicari di store biasa."</p>
+<div>
+<p class="font-bold text-tertiary">Jessica Tan</p>
+<p class="text-xs text-on-surface-variant uppercase tracking-widest">Corporate Lawyer, Surabaya</p>
+</div>
+</div>
+</div>
+</section>
+<!-- FAQ Section -->
+<section class="py-32 px-8 bg-surface-container-low">
+<div class="max-w-3xl mx-auto">
+<h2 class="text-3xl font-bold text-tertiary mb-12 text-center tracking-tight">Pertanyaan Umum</h2>
+<div class="space-y-6">
+<div class="bg-background p-8 group cursor-pointer">
+<div class="flex justify-between items-center mb-2">
+<h3 class="text-lg font-bold text-tertiary">Apakah barangnya 100% original?</h3>
+<span class="material-symbols-outlined text-primary" data-icon="expand_more">expand_more</span>
+</div>
+<p class="text-on-surface-variant text-sm leading-relaxed max-h-0 overflow-hidden group-hover:max-h-40 transition-all duration-500">
+                            Tentu. Semua barang dibeli langsung dari store resmi MAP Group (Nike, Zara, Sephora, dll) menggunakan akses khusus kami. Setiap pembelian disertakan dengan receipt/bukti bayar store.
+                        </p>
+</div>
+<div class="bg-background p-8 group cursor-pointer">
+<div class="flex justify-between items-center mb-2">
+<h3 class="text-lg font-bold text-tertiary">Berapa biaya jasanya?</h3>
+<span class="material-symbols-outlined text-primary" data-icon="expand_more">expand_more</span>
+</div>
+<p class="text-on-surface-variant text-sm leading-relaxed max-h-0 overflow-hidden group-hover:max-h-40 transition-all duration-500">
+                            Biaya jasa kami sangat kompetitif, mulai dari Rp 25.000 per item tergantung pada kategori dan nilai barang. Anda tetap akan mendapatkan harga jauh lebih murah dibanding harga retail store.
+                        </p>
+</div>
+<div class="bg-background p-8 group cursor-pointer">
+<div class="flex justify-between items-center mb-2">
+<h3 class="text-lg font-bold text-tertiary">Kenapa harganya bisa lebih murah?</h3>
+<span class="material-symbols-outlined text-primary" data-icon="expand_more">expand_more</span>
+</div>
+<p class="text-on-surface-variant text-sm leading-relaxed max-h-0 overflow-hidden group-hover:max-h-40 transition-all duration-500">
+                            Kami memanfaatkan jaringan akses "Insider" di MAP Group yang memberikan diskon khusus karyawan atau partner untuk produk-produk tertentu, yang kemudian kami bagikan manfaatnya kepada pelanggan setia kami.
+                        </p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#131313] w-full py-12 px-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto">
+<div class="space-y-6">
+<div class="text-lg font-bold text-[#f9f9f9]">JastipVIP</div>
+<p class="text-sm text-[#f9f9f9]/60 max-w-xs leading-relaxed">
+                    Personal shopping service eksklusif untuk brand ternama di bawah naungan MAP Group. Mewah, Terjangkau, Terpercaya.
+                </p>
+<div class="flex gap-6">
+<a class="text-[#e9c349] hover:text-[#f9f9f9] transition-opacity uppercase tracking-widest text-[10px] font-bold" href="#">WhatsApp</a>
+<a class="text-[#e9c349] hover:text-[#f9f9f9] transition-opacity uppercase tracking-widest text-[10px] font-bold" href="#">Instagram</a>
+</div>
+</div>
+<div class="flex flex-col md:items-end justify-between gap-8">
+<div class="flex gap-8">
+<a class="text-[#f9f9f9]/60 hover:text-[#f9f9f9] text-xs uppercase tracking-widest transition-opacity" href="#">Terms</a>
+<a class="text-[#f9f9f9]/60 hover:text-[#f9f9f9] text-xs uppercase tracking-widest transition-opacity" href="#">Privacy</a>
+</div>
+<div class="text-[10px] text-[#f9f9f9]/30 uppercase tracking-widest">
+                    © 2024 JastipVIP. All rights reserved.
+                </div>
+</div>
+</div>
+</footer>
+</body></html>
