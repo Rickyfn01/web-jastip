@@ -8,6 +8,33 @@ test.describe.serial('JastipVIP order flow', () => {
     await prisma.$disconnect();
   });
 
+  test('order API rejects missing required fields', async ({ request }) => {
+    const formData = new FormData();
+    formData.set('customerName', 'E2E Missing Fields');
+    formData.set('brand', 'No DP Scenario');
+    // intentionally omit whatsappNumber and dpPercentage
+
+    const response = await request.post('/api/orders', {
+      multipart: {
+        customerName: String(formData.get('customerName')),
+        brand: String(formData.get('brand')),
+      },
+    });
+
+    expect(response.status()).toBe(400);
+    const payload = await response.json();
+    expect(payload.error).toContain('wajib diisi');
+  });
+
+  test('admin login fails with wrong password', async ({ page }) => {
+    await page.goto('/admin');
+    await page.locator('input[type="password"]').fill('wrong-password');
+    await page.getByRole('button', { name: 'Akses Dashboard' }).click();
+
+    await expect(page).toHaveURL(/\/admin$/);
+    await expect(page.getByText('Password salah')).toBeVisible();
+  });
+
   test('customer submit -> database -> tracking -> admin update', async ({ page }) => {
     const runId = Date.now();
     const customerName = `E2E User ${runId}`;
