@@ -38,9 +38,6 @@ export default function Navbar() {
           <Link href="/register" className="text-sm font-medium text-zinc-300 hover:text-white transition-colors">
             Daftar Pembeli
           </Link>
-          <button onClick={() => scrollTo('request-form')} className="bg-white text-black text-sm font-semibold px-5 py-2 rounded-full hover:bg-zinc-200 transition-colors">
-            Titip Sekarang
-          </button>
         </div>
 
         {/* Mobile Toggle */}
@@ -59,9 +56,6 @@ export default function Navbar() {
           <Link href="/register" onClick={() => setIsMenuOpen(false)} className="block w-full text-left text-zinc-300 hover:text-white py-2">
             Daftar Pembeli
           </Link>
-          <button onClick={() => scrollTo('request-form')} className="w-full bg-white text-black text-sm font-semibold px-5 py-2.5 rounded-full mt-2">
-            Titip Sekarang
-          </button>
         </div>
       )}
     </nav>
