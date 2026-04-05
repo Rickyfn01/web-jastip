@@ -48,7 +48,8 @@ export default function RegisterPage() {
       localStorage.setItem('customer_id', data.customer.id);
       localStorage.setItem('customer_name', data.customer.fullName);
       
-      router.push('/?registered=1');
+      // Redirect to member dashboard
+      router.push('/member/dashboard');
     } catch (error: unknown) {
       setError((error as Error).message);
     } finally {
