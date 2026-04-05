@@ -8,9 +8,18 @@ import { useCustomerAuth } from '@/lib/use-customer-auth';
 interface RequestFormProps {
   forceOpen?: boolean;
   hideFloatingButton?: boolean;
+  memberMode?: boolean;
+  initialCustomerName?: string;
+  initialWhatsappNumber?: string;
 }
 
-export default function RequestForm({ forceOpen = false, hideFloatingButton = false }: RequestFormProps) {
+export default function RequestForm({
+  forceOpen = false,
+  hideFloatingButton = false,
+  memberMode = false,
+  initialCustomerName = '',
+  initialWhatsappNumber = '',
+}: RequestFormProps) {
   const { isLoggedIn, customerId, isLoading } = useCustomerAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -20,12 +29,22 @@ export default function RequestForm({ forceOpen = false, hideFloatingButton = fa
   const [warningMsg, setWarningMsg] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [memberName, setMemberName] = useState(initialCustomerName);
+  const [memberWhatsapp, setMemberWhatsapp] = useState(initialWhatsappNumber);
 
   useEffect(() => {
     if (forceOpen) {
       setIsOpen(true);
     }
   }, [forceOpen]);
+
+  useEffect(() => {
+    setMemberName(initialCustomerName);
+  }, [initialCustomerName]);
+
+  useEffect(() => {
+    setMemberWhatsapp(initialWhatsappNumber);
+  }, [initialWhatsappNumber]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -54,7 +73,20 @@ export default function RequestForm({ forceOpen = false, hideFloatingButton = fa
     setErrorMsg('');
     setWarningMsg('');
 
+    if (memberMode && !selectedFile) {
+      setErrorMsg('Foto produk wajib diupload untuk request member.');
+      setIsSubmitting(false);
+      return;
+    }
+
     const formData = new FormData(e.currentTarget);
+
+    if (memberMode) {
+      formData.set('customerName', memberName);
+      formData.set('whatsappNumber', memberWhatsapp);
+      formData.set('brand', 'Request Member Area');
+    }
+
     if (selectedFile) {
       formData.set('file', selectedFile);
     }
@@ -210,42 +242,85 @@ export default function RequestForm({ forceOpen = false, hideFloatingButton = fa
                 <p className="text-sm text-red-400">{errorMsg}</p>
               </div>
             )}
-          
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium text-zinc-300">Nama Lengkap <span className="text-red-400">*</span></label>
-              <input 
-                type="text" 
-                name="customerName"
-                required
-                className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 focus:ring-2 focus:ring-white/20 focus:border-zinc-500 outline-none transition-all" 
-                placeholder="Misal: Budi Santoso" 
-              />
-            </div>
-            
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium text-zinc-300">No. WhatsApp <span className="text-red-400">*</span></label>
-              <input 
-                type="tel" 
-                name="whatsappNumber"
-                required
-                className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 focus:ring-2 focus:ring-white/20 focus:border-zinc-500 outline-none transition-all" 
-                placeholder="08xxxxxxxxxx" 
-              />
-            </div>
 
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium text-zinc-300">Brand & Detail (Size/Warna) <span className="text-red-400">*</span></label>
-              <input 
-                type="text" 
-                name="brand"
-                required
-                className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 focus:ring-2 focus:ring-white/20 focus:border-zinc-500 outline-none transition-all" 
-                placeholder="Contoh: Nike Air Force 1, Putih, Size 42" 
-              />
-            </div>
+            {memberMode ? (
+              <>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-zinc-300">Nama Member</label>
+                  <input
+                    type="text"
+                    value={memberName}
+                    readOnly
+                    className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 outline-none"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-zinc-300">No. WhatsApp</label>
+                  <input
+                    type="text"
+                    value={memberWhatsapp}
+                    readOnly
+                    className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 outline-none"
+                  />
+                </div>
+
+                <input type="hidden" name="customerName" value={memberName} />
+                <input type="hidden" name="whatsappNumber" value={memberWhatsapp} />
+                <input type="hidden" name="brand" value="Request Member Area" />
+
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-zinc-300">Alamat Pengiriman <span className="text-red-400">*</span></label>
+                  <textarea
+                    name="size"
+                    required
+                    rows={3}
+                    className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 focus:ring-2 focus:ring-white/20 focus:border-zinc-500 outline-none transition-all resize-none"
+                    placeholder="Masukkan alamat lengkap pengiriman"
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-zinc-300">Nama Lengkap <span className="text-red-400">*</span></label>
+                  <input 
+                    type="text" 
+                    name="customerName"
+                    required
+                    className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 focus:ring-2 focus:ring-white/20 focus:border-zinc-500 outline-none transition-all" 
+                    placeholder="Misal: Budi Santoso" 
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-zinc-300">No. WhatsApp <span className="text-red-400">*</span></label>
+                  <input 
+                    type="tel" 
+                    name="whatsappNumber"
+                    required
+                    className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 focus:ring-2 focus:ring-white/20 focus:border-zinc-500 outline-none transition-all" 
+                    placeholder="08xxxxxxxxxx" 
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-zinc-300">Brand & Detail (Size/Warna) <span className="text-red-400">*</span></label>
+                  <input 
+                    type="text" 
+                    name="brand"
+                    required
+                    className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 focus:ring-2 focus:ring-white/20 focus:border-zinc-500 outline-none transition-all" 
+                    placeholder="Contoh: Nike Air Force 1, Putih, Size 42" 
+                  />
+                </div>
+              </>
+            )}
             
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-zinc-300">Upload Foto Produk</label>
+              <label className="text-sm font-medium text-zinc-300">
+                Upload Foto Produk {memberMode && <span className="text-red-400">*</span>}
+              </label>
               <label
                 onDragOver={(e) => {
                   e.preventDefault();

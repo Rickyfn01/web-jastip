@@ -47,6 +47,7 @@ export default function RegisterPage() {
       localStorage.setItem('customer_session_marker', 'true');
       localStorage.setItem('customer_id', data.customer.id);
       localStorage.setItem('customer_name', data.customer.fullName);
+      localStorage.setItem('customer_whatsapp', data.customer.whatsappNumber || whatsappNumber);
       
       // Redirect to member dashboard
       router.push('/member/dashboard');
