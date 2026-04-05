@@ -5,13 +5,11 @@ import RequestForm from '@/components/RequestForm';
 import WhatsAppButton from '@/components/WhatsAppButton';
 
 export default function LandingPage({ brandName }: { brandName?: string }) {
-  const headline = brandName
-    ? `Dapatkan Koleksi Spesial ${brandName} dengan Harga Insider MAP Group.`
-    : 'Dapatkan Barang Brand Favoritmu dengan Harga Insider MAP Group.';
+  const headline = 'Miliki Koleksi Brand Favoritmu dengan Harga Lebih Hemat.';
 
   const subHeadline = brandName
-    ? `Akses eksklusif belanja ${brandName} dari jaringan MAP Group. Semua produk 100% original dengan alur titip yang rapi, aman, dan transparan.`
-    : 'Akses eksklusif diskon jaringan MAP Group untuk Nike, Zara, Sephora, dan brand premium lainnya. 100% original, aman, dan transparan.';
+    ? `Layanan personal shopper terpercaya untuk ${brandName}, Nike, Zara, Sephora, dan brand ternama lainnya. Kami carikan penawaran terbaik langsung dari store resmi, khusus untuk Anda.`
+    : 'Layanan personal shopper terpercaya untuk Nike, Zara, Sephora, dan brand ternama lainnya. Kami carikan penawaran terbaik langsung dari store resmi, khusus untuk Anda.';
 
   return (
     <>
@@ -23,12 +21,12 @@ export default function LandingPage({ brandName }: { brandName?: string }) {
           <div className="absolute inset-0 opacity-20 [background:repeating-linear-gradient(90deg,transparent,transparent_46px,rgba(255,255,255,0.04)_47px,rgba(255,255,255,0.04)_48px)]" />
 
           <div className="relative z-10 mx-auto max-w-7xl">
-            <p className="mb-6 text-[11px] font-semibold uppercase tracking-[0.34em] text-[#e9c349]">Exclusive VIP Access</p>
+            <p className="mb-6 text-[11px] font-semibold uppercase tracking-[0.34em] text-[#e9c349]">Verified Personal Shopper</p>
             <h1 className="max-w-5xl text-4xl font-extrabold leading-[1.02] text-[#f9f9f9] md:text-7xl">{headline}</h1>
             <p className="mt-7 max-w-2xl text-base leading-relaxed text-[#ababab] md:text-lg">{subHeadline}</p>
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-              <a href="/register" className="bg-[#e9c349] px-8 py-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-[#4f3e00] transition hover:brightness-110">Daftar Pembeli</a>
-              <a href="#how-it-works" className="bg-transparent px-8 py-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-[#f9f9f9] transition hover:bg-[#1a1a1a]">Pelajari Lebih Lanjut</a>
+              <a href="/register" className="bg-[#e9c349] px-8 py-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-[#4f3e00] transition hover:brightness-110">Titip Sekarang</a>
+              <a href="#how-it-works" className="bg-transparent px-8 py-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-[#f9f9f9] transition hover:bg-[#1a1a1a]">Cara Order</a>
             </div>
           </div>
         </section>
