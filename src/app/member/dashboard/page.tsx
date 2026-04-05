@@ -227,9 +227,9 @@ export default function MemberDashboard() {
               <div className="bg-[#131313] border border-[#262626] rounded-lg p-12 text-center">
                 <Package className="w-16 h-16 text-[#484848] mx-auto mb-4" />
                 <p className="text-[#ababab] mb-6">Belum ada pesanan. Mulai titip barang favorit Anda sekarang!</p>
-                <a href="/" className="bg-[#e9c349] px-6 py-3 text-[#4f3e00] font-semibold rounded-lg inline-block hover:brightness-110">
+                <Link href="/member/request" className="bg-[#e9c349] px-6 py-3 text-[#4f3e00] font-semibold rounded-lg inline-block hover:brightness-110">
                   Titip Barang Sekarang
-                </a>
+                </Link>
               </div>
             ) : (
               <div className="space-y-4">

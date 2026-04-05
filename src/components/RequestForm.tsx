@@ -1,11 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Upload, X, CheckCircle2, Loader2, AlertCircle, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useCustomerAuth } from '@/lib/use-customer-auth';
 
-export default function RequestForm() {
+interface RequestFormProps {
+  forceOpen?: boolean;
+  hideFloatingButton?: boolean;
+}
+
+export default function RequestForm({ forceOpen = false, hideFloatingButton = false }: RequestFormProps) {
   const { isLoggedIn, customerId, isLoading } = useCustomerAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -15,6 +20,12 @@ export default function RequestForm() {
   const [warningMsg, setWarningMsg] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    if (forceOpen) {
+      setIsOpen(true);
+    }
+  }, [forceOpen]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -76,6 +87,10 @@ export default function RequestForm() {
   };
 
   if (!isOpen) {
+    if (hideFloatingButton || forceOpen) {
+      return null;
+    }
+
     return (
       <button 
         onClick={() => {
