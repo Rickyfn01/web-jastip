@@ -1,16 +1,16 @@
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
+import { Inter, Manrope } from 'next/font/google';
 import './globals.css';
 
-const geistSans = localFont({
-  src: './fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
   display: 'swap',
 });
 
-const geistMono = localFont({
-  src: './fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
+const manrope = Manrope({
+  subsets: ['latin'],
+  variable: '--font-manrope',
   display: 'swap',
 });
 
@@ -47,7 +47,7 @@ export default function RootLayout({
   return (
     <html lang="id" className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-zinc-950 text-white antialiased`}
+        className={`${inter.variable} ${manrope.variable} bg-zinc-950 text-white antialiased`}
       >
         {children}
       </body>
