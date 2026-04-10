@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { cookies } from 'next/headers';
 
 export async function GET(
   request: Request,
@@ -12,6 +13,15 @@ export async function GET(
       return NextResponse.json(
         { error: 'Customer ID diperlukan' },
         { status: 400 }
+      );
+    }
+
+    // Validasi: pastikan ada session cookie (mencegah akses data tanpa login)
+    const customerSession = cookies().get('customer_session');
+    if (!customerSession?.value) {
+      return NextResponse.json(
+        { error: 'Akses tidak diizinkan. Silakan login.' },
+        { status: 401 }
       );
     }
 

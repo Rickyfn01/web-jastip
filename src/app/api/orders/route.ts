@@ -42,9 +42,9 @@ export async function POST(request: Request) {
     }
 
     const dpPercentage = parseInt(dpPercentageStr, 10);
-    if (isNaN(dpPercentage)) {
+    if (isNaN(dpPercentage) || ![50, 75, 100].includes(dpPercentage)) {
       return NextResponse.json(
-        { error: 'Persentase DP tidak valid.' },
+        { error: 'Persentase DP hanya boleh 50%, 75%, atau 100%.' },
         { status: 400 }
       );
     }
@@ -53,6 +53,24 @@ export async function POST(request: Request) {
     let uploadWarning: string | null = null;
     
     if (file && file.size > 0) {
+      // Validasi ukuran file: max 5MB
+      const MAX_FILE_SIZE = 5 * 1024 * 1024;
+      if (file.size > MAX_FILE_SIZE) {
+        return NextResponse.json(
+          { error: 'Ukuran gambar maksimal 5MB.' },
+          { status: 400 }
+        );
+      }
+
+      // Validasi tipe file: hanya gambar
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+      if (!allowedTypes.includes(file.type)) {
+        return NextResponse.json(
+          { error: 'Hanya file gambar yang diizinkan (JPG, PNG, WebP, GIF).' },
+          { status: 400 }
+        );
+      }
+
       const url = await uploadImage(file, 'product-images');
       if (url) {
         productImageUrl = url;

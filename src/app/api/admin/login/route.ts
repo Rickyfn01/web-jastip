@@ -5,16 +5,24 @@ export async function POST(request: Request) {
   try {
     const { password } = await request.json();
     
-    // Check against env or fallback
-    const validPassword = process.env.ADMIN_PASSWORD || 'admin123';
+    const validPassword = process.env.ADMIN_PASSWORD;
 
-    if (password === validPassword) {
+    // Jika ADMIN_PASSWORD belum di-set di environment, tolak semua login
+    if (!validPassword) {
+      console.error('ADMIN_PASSWORD belum dikonfigurasi di environment variables!');
+      return NextResponse.json({ error: 'Konfigurasi server belum lengkap.' }, { status: 500 });
+    }
+
+    // Anti brute-force: tambahkan delay 1 detik
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    if (typeof password === 'string' && password.length > 0 && password === validPassword) {
       // Set secure HTTP-only cookie
       cookies().set('admin_session', 'authenticated', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        maxAge: 60 * 60 * 24 * 7, // 1 week
+        maxAge: 60 * 60 * 4, // 4 jam (bukan 7 hari)
         path: '/',
       });
       
