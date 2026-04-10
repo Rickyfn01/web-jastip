@@ -3,6 +3,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import RequestForm from '@/components/RequestForm';
 import WhatsAppButton from '@/components/WhatsAppButton';
+import Image from 'next/image';
 
 export default function LandingPage({ brandName }: { brandName?: string }) {
   const headline = 'Miliki Koleksi Brand Favoritmu dengan Harga Lebih Hemat.';
@@ -16,17 +17,28 @@ export default function LandingPage({ brandName }: { brandName?: string }) {
       <Navbar />
       <main className="min-h-screen bg-[#0e0e0e] text-[#e5e5e5]">
         <section className="relative overflow-hidden px-6 pt-36 pb-24 md:pt-44 md:pb-28">
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.72)_0%,rgba(0,0,0,0.42)_45%,rgba(0,0,0,0.74)_100%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_12%,rgba(233,195,73,0.2),transparent_34%)]" />
-          <div className="absolute inset-0 opacity-20 [background:repeating-linear-gradient(90deg,transparent,transparent_46px,rgba(255,255,255,0.04)_47px,rgba(255,255,255,0.04)_48px)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.72)_0%,rgba(0,0,0,0.42)_45%,rgba(0,0,0,0.74)_100%)] z-10" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_12%,rgba(233,195,73,0.2),transparent_34%)] z-10" />
+          
+          <div className="absolute inset-y-0 right-0 w-full lg:w-[65%] opacity-40 mix-blend-screen z-0">
+             <div className="absolute inset-0 bg-gradient-to-r from-[#0e0e0e] via-[#0e0e0e]/20 to-transparent z-10" />
+             <div className="absolute inset-0 bg-gradient-to-t from-[#0e0e0e] via-transparent to-transparent z-10" />
+             <Image 
+                src="/images/hero_heels.png" 
+                alt="Luxury Personal Shopper" 
+                fill 
+                className="object-cover object-right" 
+                priority 
+             />
+          </div>
 
-          <div className="relative z-10 mx-auto max-w-7xl">
+          <div className="relative z-20 mx-auto max-w-7xl">
             <p className="mb-6 text-[11px] font-semibold uppercase tracking-[0.34em] text-[#e9c349]">Verified Personal Shopper</p>
             <h1 className="max-w-5xl text-4xl font-extrabold leading-[1.02] text-[#f9f9f9] md:text-7xl">{headline}</h1>
             <p className="mt-7 max-w-2xl text-base leading-relaxed text-[#ababab] md:text-lg">{subHeadline}</p>
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-              <a href="/register" className="bg-[#e9c349] px-8 py-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-[#4f3e00] transition hover:brightness-110">Titip Sekarang</a>
-              <a href="#how-it-works" className="bg-transparent px-8 py-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-[#f9f9f9] transition hover:bg-[#1a1a1a]">Cara Order</a>
+              <a href="/register" className="bg-[#e9c349] px-8 py-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-[#4f3e00] transition hover:brightness-110 shadow-[0_0_20px_rgba(233,195,73,0.3)]">Titip Sekarang</a>
+              <a href="#how-it-works" className="bg-transparent border border-[#313131] px-8 py-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-[#f9f9f9] transition hover:bg-[#1a1a1a]">Cara Order</a>
             </div>
           </div>
         </section>
