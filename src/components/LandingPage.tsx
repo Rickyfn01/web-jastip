@@ -20,9 +20,9 @@ export default function LandingPage({ brandName }: { brandName?: string }) {
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.72)_0%,rgba(0,0,0,0.42)_45%,rgba(0,0,0,0.74)_100%)] z-10" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_12%,rgba(233,195,73,0.2),transparent_34%)] z-10" />
           
-          <div className="absolute inset-y-0 right-0 w-full lg:w-[65%] opacity-40 mix-blend-screen z-0">
-             <div className="absolute inset-0 bg-gradient-to-r from-[#0e0e0e] via-[#0e0e0e]/20 to-transparent z-10" />
-             <div className="absolute inset-0 bg-gradient-to-t from-[#0e0e0e] via-transparent to-transparent z-10" />
+          <div className="absolute inset-y-0 right-0 w-full lg:w-[65%] opacity-90 z-0">
+             <div className="absolute inset-0 bg-gradient-to-r from-[#0e0e0e] via-[#0e0e0e]/50 to-transparent z-10" />
+             <div className="absolute inset-0 bg-gradient-to-t from-[#0e0e0e] via-transparent to-[#0e0e0e]/30 z-10" />
              <Image 
                 src="/images/hero_heels.png" 
                 alt="Luxury Personal Shopper" 
