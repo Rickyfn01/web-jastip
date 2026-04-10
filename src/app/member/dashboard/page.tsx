@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, Package, User, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
+import { LogOut, Package, User, Clock, CheckCircle2, AlertCircle, Wallet, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -16,6 +16,10 @@ interface Order {
   createdAt: string;
   storePrice?: number;
   finalPrice?: number;
+  dpAmount?: number;
+  xenditInvoiceUrl?: string;
+  xenditInvoiceStatus?: string;
+  xenditInvoiceExpiryAt?: string;
 }
 
 interface Customer {
@@ -32,6 +36,22 @@ export default function MemberDashboard() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(Date.now()), 1000 * 30);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const fetchCustomerData = async (customerId: string) => {
+    const res = await fetch(`/api/customers/${customerId}`, { cache: 'no-store' });
+    if (!res.ok) {
+      throw new Error('Failed to fetch customer data');
+    }
+    const data = await res.json();
+    setCustomer(data.customer);
+    setOrders(data.orders || []);
+  };
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -45,13 +65,7 @@ export default function MemberDashboard() {
 
       try {
         // Fetch customer profile and orders
-        const res = await fetch(`/api/customers/${customerId}`);
-        if (!res.ok) {
-          throw new Error('Failed to fetch customer data');
-        }
-        const data = await res.json();
-        setCustomer(data.customer);
-        setOrders(data.orders || []);
+        await fetchCustomerData(customerId);
       } catch (err) {
         setError((err as Error).message);
         setLoading(false);
@@ -99,6 +113,59 @@ export default function MemberDashboard() {
         return <Clock className="w-4 h-4" />;
       default:
         return <AlertCircle className="w-4 h-4" />;
+    }
+  };
+
+  const getStatusLabel = (status: string) => {
+    const labels: Record<string, string> = {
+      PENDING: 'Menunggu Konfirmasi',
+      CHECKING: 'Pengecekan Stok',
+      READY_TO_PAY: 'Siap Dibayar',
+      PAID_DP: 'DP Diterima',
+      PURCHASED: 'Barang Dibeli',
+      SHIPPED: 'Sedang Dikirim',
+      COMPLETED: 'Selesai',
+    };
+
+    return labels[status] || status.replace(/_/g, ' ');
+  };
+
+  const getInvoiceDeadlineLabel = (expiryAt?: string) => {
+    if (!expiryAt) {
+      return null;
+    }
+
+    const expiry = new Date(expiryAt).getTime();
+    const remainingMs = expiry - now;
+
+    if (remainingMs <= 0) {
+      return 'Invoice kadaluarsa';
+    }
+
+    const totalMinutes = Math.floor(remainingMs / (1000 * 60));
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+
+    if (hours > 0) {
+      return `Bayar dalam ${hours}j ${minutes}m`;
+    }
+
+    return `Bayar dalam ${minutes} menit`;
+  };
+
+  const handleRefreshPaymentStatus = async () => {
+    const customerId = localStorage.getItem('customer_id');
+    if (!customerId) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await fetchCustomerData(customerId);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -234,32 +301,88 @@ export default function MemberDashboard() {
             ) : (
               <div className="space-y-4">
                 {orders.map((order) => (
-                  <Link key={order.id} href={`/track/${order.id}`}>
-                    <div className="bg-[#131313] border border-[#262626] rounded-lg p-6 hover:bg-[#1a1a1a] transition cursor-pointer">
-                      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                        <div className="flex-1">
-                          <h3 className="text-lg font-bold text-[#f9f9f9] mb-2">{order.brand}</h3>
-                          <p className="text-[#ababab] text-sm mb-3">Order ID: {order.id.slice(0, 8)}...</p>
-                          <div className="flex flex-wrap gap-2">
-                            <span className={`px-3 py-1 rounded-full text-xs font-semibold border flex items-center gap-1 ${getStatusColor(order.status)}`}>
-                              {getStatusIcon(order.status)}
-                              {order.status.replace(/_/g, ' ')}
+                  <div key={order.id} className="bg-[#131313] border border-[#262626] rounded-lg p-6">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                      <div className="flex-1">
+                        <h3 className="text-lg font-bold text-[#f9f9f9] mb-2">{order.brand}</h3>
+                        <p className="text-[#ababab] text-sm mb-3">Order ID: {order.id.slice(0, 8)}...</p>
+                        <div className="flex flex-wrap gap-2">
+                          <span className={`px-3 py-1 rounded-full text-xs font-semibold border flex items-center gap-1 ${getStatusColor(order.status)}`}>
+                            {getStatusIcon(order.status)}
+                            {getStatusLabel(order.status)}
+                          </span>
+                          {order.status === 'READY_TO_PAY' && order.xenditInvoiceUrl && order.xenditInvoiceStatus !== 'PAID' && (
+                            <span className="px-3 py-1 rounded-full text-xs font-semibold border border-[#e9c349]/40 bg-[#e9c349]/10 text-[#e9c349]">
+                              Invoice siap dibayar
                             </span>
-                          </div>
-                        </div>
-
-                        <div className="text-right">
-                          {order.dpPercentage && (
-                            <p className="text-sm text-[#757575] mb-2">DP {order.dpPercentage}%</p>
                           )}
-                          <p className="text-[#ababab] text-sm">
-                            {new Date(order.createdAt).toLocaleDateString('id-ID')}
-                          </p>
+                          {order.status === 'READY_TO_PAY' && order.xenditInvoiceStatus === 'EXPIRED' && (
+                            <span className="px-3 py-1 rounded-full text-xs font-semibold border border-red-500/30 bg-red-500/10 text-red-300">
+                              Invoice kadaluarsa
+                            </span>
+                          )}
                         </div>
                       </div>
+
+                      <div className="text-right">
+                        {order.dpPercentage && (
+                          <p className="text-sm text-[#757575] mb-1">DP {order.dpPercentage}%</p>
+                        )}
+                        {order.dpAmount ? (
+                          <p className="text-sm text-[#f9f9f9] mb-2">
+                            Tagihan DP: {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(order.dpAmount)}
+                          </p>
+                        ) : null}
+                        <p className="text-[#ababab] text-sm">
+                          {new Date(order.createdAt).toLocaleDateString('id-ID')}
+                        </p>
+                      </div>
                     </div>
-                  </Link>
+
+                    <div className="mt-5 flex flex-wrap gap-3">
+                      <Link
+                        href={`/track/${order.id}`}
+                        className="px-4 py-2.5 rounded-lg border border-[#313131] text-[#e5e5e5] hover:bg-[#1a1a1a] transition text-sm font-semibold"
+                      >
+                        Lihat Detail Tracking
+                      </Link>
+
+                      {order.status === 'READY_TO_PAY' && order.xenditInvoiceUrl && order.xenditInvoiceStatus !== 'PAID' && (
+                        <div className="flex flex-wrap items-center gap-3">
+                          <a
+                            href={order.xenditInvoiceUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-4 py-2.5 rounded-lg bg-[#e9c349] hover:bg-[#f4d061] text-[#4f3e00] transition text-sm font-bold inline-flex items-center gap-2"
+                          >
+                            <Wallet className="w-4 h-4" />
+                            Bayar DP Sekarang
+                            <ExternalLink className="w-4 h-4" />
+                          </a>
+                          {getInvoiceDeadlineLabel(order.xenditInvoiceExpiryAt) && (
+                            <span className="text-xs text-[#ababab]">{getInvoiceDeadlineLabel(order.xenditInvoiceExpiryAt)}</span>
+                          )}
+                        </div>
+                      )}
+
+                      {order.status === 'READY_TO_PAY' && order.xenditInvoiceStatus === 'EXPIRED' && (
+                        <p className="text-xs text-red-300 self-center">Hubungi admin untuk kirim ulang invoice pembayaran.</p>
+                      )}
+                    </div>
+                  </div>
                 ))}
+              </div>
+            )}
+
+            {orders.some((order) => order.status === 'READY_TO_PAY') && (
+              <div className="mt-6 flex items-center gap-3">
+                <button
+                  onClick={handleRefreshPaymentStatus}
+                  className="px-4 py-2 rounded-lg border border-[#313131] text-[#e5e5e5] hover:bg-[#1a1a1a] transition text-sm font-semibold"
+                >
+                  Saya Sudah Bayar, Refresh Status
+                </button>
+                <p className="text-xs text-[#8a8a8a]">Gunakan tombol ini setelah pembayaran selesai di halaman Xendit.</p>
               </div>
             )}
           </div>

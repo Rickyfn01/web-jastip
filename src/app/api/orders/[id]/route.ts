@@ -15,6 +15,14 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
     const { status, storePrice, finalPrice, dpAmount, receiptImage } = body;
 
+    const existingOrder = await prisma.order.findUnique({
+      where: { id },
+    });
+
+    if (!existingOrder) {
+      return NextResponse.json({ error: 'Pesanan tidak ditemukan.' }, { status: 404 });
+    }
+
     const updatedOrder = await prisma.order.update({
       where: { id },
       data: {
@@ -23,6 +31,8 @@ export async function PATCH(request: Request, { params }: { params: { id: string
         finalPrice: finalPrice !== undefined ? finalPrice : undefined,
         dpAmount: dpAmount !== undefined ? dpAmount : undefined,
         receiptImage: receiptImage !== undefined ? receiptImage : undefined,
+        // Jika admin menandai PAID_DP, catat waktu pembayaran
+        ...(status === 'PAID_DP' && !existingOrder.dpPaidAt ? { dpPaidAt: new Date() } : {}),
       },
     });
 
@@ -35,3 +45,4 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     );
   }
 }
+

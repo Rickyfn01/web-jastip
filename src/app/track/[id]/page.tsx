@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { CheckCircle2, MessageCircle } from 'lucide-react';
+import { CheckCircle2, Copy, MessageCircle, Banknote } from 'lucide-react';
 import Image from 'next/image';
 
 export const dynamic = 'force-dynamic';
@@ -27,6 +27,12 @@ export default async function TrackOrderPage({ params }: { params: { id: string 
     notFound();
   }
 
+  // Bank transfer info from environment
+  const bankName = process.env.BANK_NAME || 'BCA';
+  const bankAccountNumber = process.env.BANK_ACCOUNT_NUMBER || '1234567890';
+  const bankAccountHolder = process.env.BANK_ACCOUNT_HOLDER || 'Nama Pemilik';
+  const adminWhatsapp = process.env.ADMIN_WHATSAPP || '6281234567890';
+
   // Find the index of the current status
   const currentStatusIndex = Math.max(STATUS_STEPS.findIndex((s) => s.id === order.status), 0);
 
@@ -37,6 +43,17 @@ export default async function TrackOrderPage({ params }: { params: { id: string 
   };
 
   const progressPercent = Math.round(((currentStatusIndex + 1) / STATUS_STEPS.length) * 100);
+
+  // WhatsApp confirmation message
+  const waConfirmMessage = encodeURIComponent(
+    `Halo Admin JastipVIP, saya sudah transfer DP untuk pesanan:\n\n` +
+    `📋 Order ID: ${order.id}\n` +
+    `👤 Nama: ${order.customerName}\n` +
+    `🏷️ Brand: ${order.brand}\n` +
+    `💰 Jumlah: ${formatIDR(order.dpAmount)}\n` +
+    `🏦 Ke rekening: ${bankName} ${bankAccountNumber}\n\n` +
+    `Mohon dikonfirmasi. Terima kasih! 🙏`
+  );
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col font-sans selection:bg-emerald-500/30">
@@ -150,7 +167,7 @@ export default async function TrackOrderPage({ params }: { params: { id: string 
                       <span className="text-white font-bold">{formatIDR(order.finalPrice)}</span>
                     </div>
                     <div className="border-t border-zinc-800 pt-3 flex justify-between">
-                      <span className="text-zinc-400">Sudah Dibayar (DP {order.dpPercentage}%)</span>
+                      <span className="text-zinc-400">Tagihan DP {order.dpPercentage}%</span>
                       <span className="text-emerald-400">{formatIDR(order.dpAmount)}</span>
                     </div>
                     <div className="flex justify-between font-bold text-lg pt-1">
@@ -164,6 +181,67 @@ export default async function TrackOrderPage({ params }: { params: { id: string 
                   </div>
                 )}
               </div>
+
+              {/* Bank Transfer Section - tampil saat READY_TO_PAY */}
+              {order.status === 'READY_TO_PAY' && order.dpAmount && (
+                <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 shadow-xl space-y-5">
+                  <div className="flex items-center gap-2">
+                    <Banknote className="w-5 h-5 text-[#e9c349]" />
+                    <h3 className="font-bold text-lg">Transfer Pembayaran DP</h3>
+                  </div>
+
+                  <div className="bg-zinc-800/70 border border-zinc-700 rounded-2xl p-5 space-y-4">
+                    <div>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-1">Bank Tujuan</p>
+                      <p className="text-white font-bold text-lg">{bankName}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-1">Nomor Rekening</p>
+                      <div className="flex items-center gap-3">
+                        <p className="text-white font-mono text-xl font-bold tracking-wider">{bankAccountNumber}</p>
+                        <Copy className="w-4 h-4 text-zinc-500" />
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-1">Atas Nama</p>
+                      <p className="text-white font-semibold">{bankAccountHolder}</p>
+                    </div>
+                    <div className="border-t border-zinc-700 pt-4">
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 mb-1">Jumlah Transfer</p>
+                      <p className="text-[#e9c349] font-extrabold text-2xl">{formatIDR(order.dpAmount)}</p>
+                    </div>
+                  </div>
+
+                  <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 text-sm text-amber-200">
+                    ⚠️ Pastikan jumlah transfer <strong>sesuai persis</strong> agar kami bisa memproses pesanan lebih cepat.
+                  </div>
+
+                  <a
+                    href={`https://wa.me/${adminWhatsapp}?text=${waConfirmMessage}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-[#e9c349] hover:bg-[#f4d061] text-black font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors"
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    Konfirmasi Pembayaran via WhatsApp
+                  </a>
+                </div>
+              )}
+
+              {/* Payment Confirmed - tampil saat PAID_DP */}
+              {order.status === 'PAID_DP' && (
+                <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 shadow-xl space-y-4">
+                  <h3 className="font-bold text-lg">Status Pembayaran</h3>
+                  <div className="text-sm text-emerald-300 border border-emerald-500/30 bg-emerald-500/10 rounded-xl p-4">
+                    ✅ Pembayaran DP sudah diterima dan dikonfirmasi oleh admin.
+                    {order.dpPaidAt && (
+                      <span className="block text-emerald-200/80 mt-1">
+                        Dikonfirmasi pada {new Date(order.dpPaidAt).toLocaleString('id-ID')}.
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Receipt Image (If any) */}
               {order.receiptImage && (
@@ -186,7 +264,7 @@ export default async function TrackOrderPage({ params }: { params: { id: string 
 
               {/* WhatsApp Helper */}
               <a 
-                href={`https://wa.me/6281234567890?text=Halo%20Admin%20JastipVIP,%20saya%20ingin%20bertanya%20mengenai%20pesanan%20saya%20dengan%20Order%20ID:%20${order.id}`}
+                href={`https://wa.me/${adminWhatsapp}?text=${encodeURIComponent(`Halo Admin JastipVIP, saya ingin bertanya mengenai pesanan saya dengan Order ID: ${order.id}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg"
@@ -204,3 +282,4 @@ export default async function TrackOrderPage({ params }: { params: { id: string 
     </div>
   );
 }
+

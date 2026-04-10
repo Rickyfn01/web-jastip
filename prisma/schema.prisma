@@ -24,6 +24,11 @@ model Order {
   finalPrice      Float?
   dpPercentage    Int
   dpAmount        Float?
+  xenditInvoiceId String?  @unique
+  xenditInvoiceUrl String?
+  xenditInvoiceStatus String?
+  xenditInvoiceExpiryAt DateTime?
+  dpPaidAt        DateTime?
   receiptImage    String?
   createdAt       DateTime @default(now())
 }

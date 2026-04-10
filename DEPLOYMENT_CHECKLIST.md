@@ -11,6 +11,8 @@ Set these in Vercel for Production and Preview:
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `ADMIN_PASSWORD`
 - `SITE_URL`
+- `XENDIT_SECRET_KEY`
+- `XENDIT_CALLBACK_TOKEN`
 
 ## Local Validation
 
@@ -31,6 +33,8 @@ After deploy, verify these flows manually:
 - Log in at `/admin`
 - Open `/admin/dashboard`
 - Update an order in `/admin/orders/[id]`
+- Verify invoice link is generated when status moved to `READY_TO_PAY`
+- Trigger/capture Xendit webhook and confirm order status changes to `PAID_DP`
 - Refresh tracking page and confirm updated status and pricing
 
 ## Operational Notes
