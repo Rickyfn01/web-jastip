@@ -29,6 +29,12 @@ async function verifyCustomerSessionToken(token: string): Promise<string | null>
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const hostname = request.headers.get('host');
+
+  // 0. Redirect old Vercel URL to new custom domain
+  if (hostname === 'web-jastip-ricky.vercel.app') {
+    return NextResponse.redirect(`https://jastipvip.vercel.app${pathname}`, 301);
+  }
 
   // 1. Rewrite for SEO: /jastip-[brand] -> /brand/[brand]
   if (pathname.startsWith('/jastip-')) {
@@ -106,5 +112,13 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/admin', '/jastip-:path*', '/member/:path*', '/api/:path*'],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico, images/ (static files)
+     */
+    '/((?!_next/static|_next/image|images/|favicon.ico).*)',
+  ],
 };
