@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, Manrope } from 'next/font/google';
 import './globals.css';
+import IdleLogout from '@/components/IdleLogout';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -49,6 +50,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${manrope.variable} bg-zinc-950 text-white antialiased`}
       >
+        <IdleLogout />
         {children}
       </body>
     </html>

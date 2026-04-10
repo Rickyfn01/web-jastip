@@ -49,6 +49,17 @@ export async function middleware(request: NextRequest) {
     if (!isAuthenticated) {
       return NextResponse.redirect(new URL('/register?next=' + encodeURIComponent(pathname), request.url));
     }
+
+    // Sliding session: perpanjang cookie 10 menit setiap ada aktivitas
+    const response = NextResponse.next();
+    response.cookies.set('customer_session', customerSession!.value, {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+      maxAge: 60 * 10, // Reset 10 menit
+    });
+    return response;
   }
 
   // 3. Admin Authentication
