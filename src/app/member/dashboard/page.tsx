@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, Package, User, Clock, CheckCircle2, AlertCircle, Wallet, ExternalLink } from 'lucide-react';
+import { LogOut, Package, User, Clock, CheckCircle2, AlertCircle, Plus } from 'lucide-react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -17,9 +17,6 @@ interface Order {
   storePrice?: number;
   finalPrice?: number;
   dpAmount?: number;
-  xenditInvoiceUrl?: string;
-  xenditInvoiceStatus?: string;
-  xenditInvoiceExpiryAt?: string;
 }
 
 interface Customer {
@@ -36,12 +33,7 @@ export default function MemberDashboard() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [now, setNow] = useState(Date.now());
 
-  useEffect(() => {
-    const timer = window.setInterval(() => setNow(Date.now()), 1000 * 30);
-    return () => window.clearInterval(timer);
-  }, []);
 
   const fetchCustomerData = async (customerId: string) => {
     const res = await fetch(`/api/customers/${customerId}`, { cache: 'no-store' });
@@ -130,28 +122,7 @@ export default function MemberDashboard() {
     return labels[status] || status.replace(/_/g, ' ');
   };
 
-  const getInvoiceDeadlineLabel = (expiryAt?: string) => {
-    if (!expiryAt) {
-      return null;
-    }
 
-    const expiry = new Date(expiryAt).getTime();
-    const remainingMs = expiry - now;
-
-    if (remainingMs <= 0) {
-      return 'Invoice kadaluarsa';
-    }
-
-    const totalMinutes = Math.floor(remainingMs / (1000 * 60));
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-
-    if (hours > 0) {
-      return `Bayar dalam ${hours}j ${minutes}m`;
-    }
-
-    return `Bayar dalam ${minutes} menit`;
-  };
 
   const handleRefreshPaymentStatus = async () => {
     const customerId = localStorage.getItem('customer_id');
@@ -215,13 +186,22 @@ export default function MemberDashboard() {
               <h1 className="text-4xl md:text-5xl font-extrabold text-[#f9f9f9] mb-2">Member Dashboard</h1>
               <p className="text-[#ababab]">Kelola pesanan dan profil akun Anda</p>
             </div>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 bg-red-500/20 hover:bg-red-500/30 text-red-300 px-6 py-3 rounded-lg transition border border-red-500/30"
-            >
-              <LogOut className="w-4 h-4" />
-              Logout
-            </button>
+            <div className="flex items-center gap-3">
+              <Link
+                href="/member/request"
+                className="flex items-center gap-2 bg-[#e9c349] hover:brightness-110 text-[#4f3e00] px-6 py-3 rounded-lg transition font-bold text-sm"
+              >
+                <Plus className="w-4 h-4" />
+                Titip Barang Baru
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 bg-red-500/20 hover:bg-red-500/30 text-red-300 px-6 py-3 rounded-lg transition border border-red-500/30"
+              >
+                <LogOut className="w-4 h-4" />
+                Logout
+              </button>
+            </div>
           </div>
 
           {/* Profile Section */}
@@ -311,14 +291,9 @@ export default function MemberDashboard() {
                             {getStatusIcon(order.status)}
                             {getStatusLabel(order.status)}
                           </span>
-                          {order.status === 'READY_TO_PAY' && order.xenditInvoiceUrl && order.xenditInvoiceStatus !== 'PAID' && (
+                          {order.status === 'READY_TO_PAY' && (
                             <span className="px-3 py-1 rounded-full text-xs font-semibold border border-[#e9c349]/40 bg-[#e9c349]/10 text-[#e9c349]">
-                              Invoice siap dibayar
-                            </span>
-                          )}
-                          {order.status === 'READY_TO_PAY' && order.xenditInvoiceStatus === 'EXPIRED' && (
-                            <span className="px-3 py-1 rounded-full text-xs font-semibold border border-red-500/30 bg-red-500/10 text-red-300">
-                              Invoice kadaluarsa
+                              Segera transfer DP
                             </span>
                           )}
                         </div>
@@ -347,26 +322,13 @@ export default function MemberDashboard() {
                         Lihat Detail Tracking
                       </Link>
 
-                      {order.status === 'READY_TO_PAY' && order.xenditInvoiceUrl && order.xenditInvoiceStatus !== 'PAID' && (
-                        <div className="flex flex-wrap items-center gap-3">
-                          <a
-                            href={order.xenditInvoiceUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-4 py-2.5 rounded-lg bg-[#e9c349] hover:bg-[#f4d061] text-[#4f3e00] transition text-sm font-bold inline-flex items-center gap-2"
-                          >
-                            <Wallet className="w-4 h-4" />
-                            Bayar DP Sekarang
-                            <ExternalLink className="w-4 h-4" />
-                          </a>
-                          {getInvoiceDeadlineLabel(order.xenditInvoiceExpiryAt) && (
-                            <span className="text-xs text-[#ababab]">{getInvoiceDeadlineLabel(order.xenditInvoiceExpiryAt)}</span>
-                          )}
-                        </div>
-                      )}
-
-                      {order.status === 'READY_TO_PAY' && order.xenditInvoiceStatus === 'EXPIRED' && (
-                        <p className="text-xs text-red-300 self-center">Hubungi admin untuk kirim ulang invoice pembayaran.</p>
+                      {order.status === 'READY_TO_PAY' && (
+                        <Link
+                          href={`/track/${order.id}`}
+                          className="px-4 py-2.5 rounded-lg bg-[#e9c349] hover:bg-[#f4d061] text-[#4f3e00] transition text-sm font-bold inline-flex items-center gap-2"
+                        >
+                          Lihat Info Transfer DP
+                        </Link>
                       )}
                     </div>
                   </div>
@@ -374,15 +336,30 @@ export default function MemberDashboard() {
               </div>
             )}
 
+            {/* Tombol Titip Barang Baru di bawah daftar */}
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#131313] border border-[#262626] rounded-lg p-6">
+              <div>
+                <p className="text-[#f9f9f9] font-semibold">Mau titip barang lagi?</p>
+                <p className="text-[#ababab] text-sm">Submit request baru untuk barang lainnya.</p>
+              </div>
+              <Link
+                href="/member/request"
+                className="flex items-center gap-2 bg-[#e9c349] hover:brightness-110 text-[#4f3e00] px-8 py-3 rounded-lg transition font-bold text-sm whitespace-nowrap"
+              >
+                <Plus className="w-5 h-5" />
+                Titip Barang Baru
+              </Link>
+            </div>
+
             {orders.some((order) => order.status === 'READY_TO_PAY') && (
               <div className="mt-6 flex items-center gap-3">
                 <button
                   onClick={handleRefreshPaymentStatus}
                   className="px-4 py-2 rounded-lg border border-[#313131] text-[#e5e5e5] hover:bg-[#1a1a1a] transition text-sm font-semibold"
                 >
-                  Saya Sudah Bayar, Refresh Status
+                  Saya Sudah Transfer, Refresh Status
                 </button>
-                <p className="text-xs text-[#8a8a8a]">Gunakan tombol ini setelah pembayaran selesai di halaman Xendit.</p>
+                <p className="text-xs text-[#8a8a8a]">Gunakan tombol ini setelah Anda melakukan transfer bank.</p>
               </div>
             )}
           </div>
